@@ -1,0 +1,17 @@
+# Bases de datos y Volúmenes de Docker
+/*_data/
+
+# Dependencias (Se ignoran porque cada servidor las instalará)
+/core/vendor/
+/web/node_modules/
+/ai/venv/
+
+# Archivos de entorno (Contienen contraseñas, ¡nunca se suben!)
+.env
+/core/.env
+/web/.env
+/ai/.env
+
+#Archivos de texto del proyecto
+*.txt
+*.pdf
