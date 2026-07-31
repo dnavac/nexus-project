@@ -18,7 +18,13 @@ class AgentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+            'zone' => fake()->randomElement(['Bocagrande', 'Castillogrande', 'Manga', 'Centro Histórico','El Laguito','Getsemani','Crespo','Cabrero','Canapote','Cielo Mar']),    
+            'languages' => [fake()->randomElement(['es', 'en', 'fr'])],
+            'working_hours' => '08:00 - 18:00',
+            'monthly_sales_count' => fake()->numberBetween(0, 10),
         ];
     }
 }

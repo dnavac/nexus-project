@@ -18,7 +18,14 @@ class LeadFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+            'status' => fake()->randomElement(['new', 'contacted', 'qualified', 'converted','lost']),
+            'notes' => fake()->sentence(),
+            // Busca un ID al azar de las propiedades y agentes que ya existen
+            'property_id' => \App\Models\Property::inRandomOrder()->first()?->id,
+            'agent_id' => \App\Models\Agent::inRandomOrder()->first()?->id,
         ];
     }
 }
