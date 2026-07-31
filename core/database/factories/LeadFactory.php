@@ -21,7 +21,7 @@ class LeadFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
             'phone' => fake()->phoneNumber(),
-            'status' => fake()->randomElement(['new', 'contacted', 'qualified', 'converted','lost']),
+            'status' => fake()->randomElement(['nuevo', 'contactado', 'calificado', 'perdido']),
             'notes' => fake()->sentence(),
             // Busca un ID al azar de las propiedades y agentes que ya existen
             'property_id' => \App\Models\Property::inRandomOrder()->first()?->id,
