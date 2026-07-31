@@ -28,7 +28,7 @@ services:
     volumes:
       - ./ai:/app
     working_dir: /app
-    command: uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+    command: sh -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8080 --reload"
     ports:
       - "8080:8080"
     networks:
@@ -51,22 +51,6 @@ services:
       - "8000:8000"
     networks:
       - nexus_network
-
-  # 4. Orquestador (n8n Community Edition)
-  n8n:
-    image: n8nio/n8n:latest
-    container_name: nexus_n8n
-    ports:
-      - "5678:5678"
-    volumes:
-      - n8n_data:/home/node/.n8n
-    networks:
-      - nexus_network
-    environment:
-      - N8N_BASIC_AUTH_ACTIVE=true
-      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
-      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
-
   # 5. Frontend (React 18 + TypeScript) - Usando Node para desarrollo
   app-web:
     image: node:20-alpine
@@ -131,9 +115,7 @@ services:
       - app-core
       - app-ai
       - app-web
-      - n8n
       - chroma
-
   # 8. Ollama (Opcional, 100% offline) - Descomentar si se va a usar
   # ollama:
   #   image: ollama/ollama
@@ -153,6 +135,5 @@ volumes:
   postgres_data:
   mongo_data:
   redis_data:
-  n8n_data:
   chroma_data:
   ollama_models:
