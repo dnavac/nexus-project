@@ -13,7 +13,11 @@ class LeadController extends Controller
      */
     public function index()
     {
-        //
+        $leads = Lead::all();
+        return response()->json([
+            'message' => 'Leads obtenidos correctamente',
+            'leads' => $leads
+        ], 200);
     }
 
     /**
@@ -29,7 +33,11 @@ class LeadController extends Controller
      */
     public function store(StoreLeadRequest $request)
     {
-        //
+        $lead = Lead::create($request->all());
+        return response()->json([
+            'message' => 'Lead creado correctamente',
+            'lead' => $lead
+        ], 201);
     }
 
     /**
@@ -37,7 +45,10 @@ class LeadController extends Controller
      */
     public function show(Lead $lead)
     {
-        //
+        return response()->json([
+            'message' => 'Lead obtenido correctamente',
+            'lead' => $lead
+        ], 200);
     }
 
     /**
@@ -53,7 +64,11 @@ class LeadController extends Controller
      */
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
-        //
+        $lead->update($request->all());
+        return response()->json([
+            'message' => 'Lead actualizado correctamente',
+            'lead' => $lead
+        ], 200);
     }
 
     /**
@@ -61,6 +76,9 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
-        //
+        $lead->delete();
+        return response()->json([
+            'message' => 'Lead eliminado correctamente'
+        ], 200);
     }
 }

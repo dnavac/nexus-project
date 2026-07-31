@@ -13,7 +13,11 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        //
+        $property = Property::all();
+        return response()->json([
+            'message' => 'Propiedades obtenidas correctamente',
+            'properties' => $property
+        ], 200);
     }
 
     /**
@@ -29,7 +33,11 @@ class PropertyController extends Controller
      */
     public function store(StorePropertyRequest $request)
     {
-        //
+        $property = Property::create($request->all());
+        return response()->json([
+            'message' => 'Propiedad creada correctamente',
+            'property' => $property
+        ], 201);
     }
 
     /**
@@ -37,7 +45,10 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        //
+        return response()->json([
+            'message' => 'Propiedad obtenida correctamente',
+            'property' => $property
+        ], 200);
     }
 
     /**
@@ -53,7 +64,11 @@ class PropertyController extends Controller
      */
     public function update(UpdatePropertyRequest $request, Property $property)
     {
-        //
+        $property->update($request->all());
+        return response()->json([
+            'message' => 'Propiedad actualizada correctamente',
+            'property' => $property
+        ], 200);
     }
 
     /**
@@ -61,6 +76,9 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        //
+        $property->delete();
+        return response()->json([
+            'message' => 'Propiedad eliminada correctamente'
+        ], 200);
     }
 }

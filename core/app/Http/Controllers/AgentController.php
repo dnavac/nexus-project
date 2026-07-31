@@ -13,7 +13,11 @@ class AgentController extends Controller
      */
     public function index()
     {
-        //
+        $agents = Agent::all();
+        return response()->json([
+            'message' => 'Agentes obtenidos correctamente',
+            'agents' => $agents
+        ], 200);
     }
 
     /**
@@ -29,7 +33,11 @@ class AgentController extends Controller
      */
     public function store(StoreAgentRequest $request)
     {
-        //
+        $agent = Agent::create($request->all());
+        return response()->json([
+            'message' => 'Agente creado correctamente',
+            'agent' => $agent
+        ], 201);
     }
 
     /**
@@ -37,7 +45,10 @@ class AgentController extends Controller
      */
     public function show(Agent $agent)
     {
-        //
+        return response()->json([
+            'message' => 'Agente obtenido correctamente',
+            'agent' => $agent
+        ], 200);
     }
 
     /**
@@ -53,7 +64,11 @@ class AgentController extends Controller
      */
     public function update(UpdateAgentRequest $request, Agent $agent)
     {
-        //
+        $agent->update($request->all());
+        return response()->json([
+            'message' => 'Agente actualizado correctamente',
+            'agent' => $agent
+        ], 200);
     }
 
     /**
@@ -61,6 +76,9 @@ class AgentController extends Controller
      */
     public function destroy(Agent $agent)
     {
-        //
+        $agent->delete();
+        return response()->json([
+            'message' => 'Agente eliminado correctamente'
+        ], 200);
     }
 }
