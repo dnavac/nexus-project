@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+
+#cargar .env ANTES de importar los routers, 
+load_dotenv()
+
 from routers.chat import router as chat_router
 from routers.predict import router as predict_router
-
-load_dotenv()
 
 app = FastAPI()
 
