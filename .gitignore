@@ -15,3 +15,6 @@
 #Archivos de texto del proyecto
 *.txt
 *.pdf
+
+__pycache__/
+*.pyc
