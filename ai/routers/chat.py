@@ -14,24 +14,30 @@ import time
 router = APIRouter()
 
 # 1. Configuración Global 
-api_key = os.getenv("GOOGLE_API_KEY")
-mongo_uri = "mongodb://localhost:27017/" # Apunta al MongoDB de tu Docker
+api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+chroma_host = os.getenv("CHROMA_HOST", "localhost")
+chroma_port = int(os.getenv("CHROMA_PORT", "8000"))
+if not api_key:
+    raise RuntimeError("Falta GEMINI_API_KEY o GOOGLE_API_KEY en las variables de entorno")
+
 
 # Embeddings y Base Vectorial
 embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", google_api_key=api_key)
-chroma_client = chromadb.HttpClient(host="localhost", port=8000)
+chroma_client = chromadb.HttpClient(host=chroma_host, port=chroma_port)
 vector_store = Chroma(client=chroma_client, collection_name="nexus_knowledge", embedding_function=embeddings)
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
 # Modelo de Lenguaje (El cerebro)
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0, google_api_key=api_key)
+# gemini-2.5-flash: confirmado disponible con esta API key (ver check_models.py)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0, google_api_key=api_key)
 
 # A) Prompt para reformular la pregunta. CRÍTICO: debe ser MUY BREVE para no superar
 # el límite de tokens del modelo de embeddings (gemini-embedding-001 acepta ~100 tokens).
 def get_session_history(session_id: str):
     return MongoDBChatMessageHistory(
         session_id=session_id,
-        connection_string="mongodb://localhost:27017/",
+        connection_string=mongo_uri,
         database_name="nexus_ai_db",
         collection_name="chat_histories",
     )

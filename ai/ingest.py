@@ -9,9 +9,9 @@ from langchain_chroma import Chroma
 
 # 1. Cargar la API Key
 load_dotenv()
-api_key = os.getenv("GOOGLE_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    raise ValueError("GOOGLE_API_KEY no configurada en .env")
+    raise ValueError("GEMINI_API_KEY o GOOGLE_API_KEY no configurada en .env")
 
 print("🔍 Buscando documentos...")
 # 2. Cargar los .txt desde la carpeta que creaste afuera
@@ -33,7 +33,9 @@ embeddings = GoogleGenerativeAIEmbeddings(
 
 # 5. Conectarse a ChromaDB y guardar
 print("Guardando vectores en ChromaDB (puerto 8000)...")
-chroma_client = chromadb.HttpClient(host="localhost", port=8000)
+chroma_host = os.getenv("CHROMA_HOST", "localhost")
+chroma_port = int(os.getenv("CHROMA_PORT", "8000"))
+chroma_client = chromadb.HttpClient(host=chroma_host, port=chroma_port)
 
 vector_store = Chroma(
     client=chroma_client,
