@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'nexus_ai' => [
+        'rag_url' => env('NEXUS_AI_RAG_URL', 'http://app-ai:8080/api/rag'),
+    ],
+
 ];

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Property;
+use App\Jobs\SyncRagDocument;
 use Illuminate\Support\Facades\Log;
 
 class PropertyObserver
@@ -12,8 +13,7 @@ class PropertyObserver
      */
     public function created(Property $property): void
     {
-        Log::info("Nueva propiedad creada (ID: {$property->id}). 
-        Notificando a la IA...");
+        SyncRagDocument::dispatchSync('properties', 'created', $property->toArray());
     }
 
     /**
@@ -21,7 +21,7 @@ class PropertyObserver
      */
     public function updated(Property $property): void
     {
-        Log::info("Propiedad actualizada (ID: {$property->id}). ctualizando RAG...");
+        SyncRagDocument::dispatchSync('properties', 'updated', $property->toArray());
     }
 
     /**
@@ -29,8 +29,7 @@ class PropertyObserver
      */
     public function deleted(Property $property): void
     {
-        Log::info("Propiedad eliminada (ID: {$property->id}). Borrando del RAG...");
-        
+        SyncRagDocument::dispatchSync('properties', 'deleted', ['id' => $property->id]);
     }
 
     /**
