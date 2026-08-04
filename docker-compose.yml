@@ -7,15 +7,11 @@ services:
     container_name: nexus_core
     volumes:
       - ./core:/var/www/html
+    env_file:
+      - ./core/.env
     networks:
       - nexus_network
     environment:
-      - DB_CONNECTION=pgsql
-      - DB_HOST=db-postgres
-      - DB_PORT=5432
-      - DB_DATABASE=${POSTGRES_DB}
-      - DB_USERNAME=${POSTGRES_USER}
-      - DB_PASSWORD=${POSTGRES_PASSWORD}
       - REDIS_HOST=cache-redis
     depends_on:
       - db-postgres
@@ -28,15 +24,18 @@ services:
     volumes:
       - ./ai:/app
     working_dir: /app
+    env_file:
+      - ./ai/.env
+      - ./core/.env
     command: sh -c "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8080 --reload"
     ports:
       - "8080:8080"
     networks:
       - nexus_network
     environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - CHROMA_HOST=${CHROMA_HOST}
-      - CHROMA_PORT=${CHROMA_PORT}
+      # Dentro de Compose, Chroma se alcanza por el nombre del servicio.
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
     depends_on:
       - chroma
       - db-mongo
